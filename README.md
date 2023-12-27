@@ -8,6 +8,6 @@ input provided by the client such as their income, essential spending, etc.
 
 Technologies
 
-User Guide & Ibstructions
+User Guide & Instructions
 
 Credits

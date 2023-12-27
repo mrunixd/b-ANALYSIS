@@ -1,0 +1,25 @@
+{
+  "name": "b-anal",
+  "version": "1.0.0",
+  "description": "A budget analysis web application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mrspedd/b-ANAL.git"
+  },
+  "author": "Manan Jaiswal & Aarnav Sheth",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrspedd/b-ANAL/issues"
+  },
+  "homepage": "https://github.com/mrspedd/b-ANAL#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
