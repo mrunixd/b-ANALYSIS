@@ -11,5 +11,5 @@ input provided by the client such as their income, essential spending, etc.
 ## User Guide & Instructions
 
 ## Credits
-Manan Jaiswal
+Manan Jaiswal <br>
 Aarnav Sheth
