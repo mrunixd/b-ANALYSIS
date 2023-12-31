@@ -18,7 +18,7 @@ export interface User {
 }
 
 export interface DataStore {
-    Users: User[];
+    users: User[];
 }
 
 function setData(data: DataStore) {
