@@ -1,6 +1,11 @@
 import fs from 'fs';
 
+export interface ErrorObject {
+    error: string;
+}
+
 export interface Financial {
+    authUserId: number;
     salary: number | void;
     rent: number | void;
     vehicle: number | void;
@@ -14,11 +19,11 @@ export interface User {
     email: string;
     password: string;
     authUserId: number;
-    financials: Financial;
 }
 
 export interface DataStore {
     users: User[];
+    financials: Financial;
 }
 
 function setData(data: DataStore) {
