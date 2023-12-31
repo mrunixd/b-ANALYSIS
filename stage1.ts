@@ -27,11 +27,11 @@ function login(email: string, password: string): number | ErrorObject {
     const user = data.users.find(user => user.email.toLowerCase() === email.toLowerCase());
 
     if (!user) {
-        return { error: 'Email address is not linked to an existing account'};
+        return { error: 'Email address is not linked to an existing account' };
     }
 
     if (user.password !== hashPassword(password)) {
-        return { error: 'Incorrect Password'};
+        return { error: 'Incorrect Password' };
     }
     return user.authUserId;
 }
@@ -50,14 +50,14 @@ function storeInfo(
 
 function createId() {
     const data = getData();
-    var num = Math.floor(Math.random() * 90000) + 10000;
+    var id = Math.floor(Math.random() * 90000) + 10000;
 
     for (const user of data.users) {
-        if (num === user.authUserId) {
+        if (id === user.authUserId) {
             return createId();
         }
     }
-    return num;
+    return id;
 }
 
 function hashPassword(password: string): string {
