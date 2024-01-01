@@ -18,6 +18,7 @@ function register(email: string, password: string): number | ErrorObject {
 
     const user = { email: email, password: hashPassword(password), authUserId: userId };
     data.users.push(user);
+    setData(data);
     return userId;
 }
 
@@ -37,6 +38,7 @@ function login(email: string, password: string): number | ErrorObject {
 }
 
 function storeInfo(
+    authUserId: number,
     salary: number,
     rent: number,
     vehicle: number,
@@ -45,7 +47,28 @@ function storeInfo(
     insurance: number,
     debt: number
 ) {
-    return 999;
+    const data = getData();
+    
+    var userInfo = data.financials.find(user => user.authUserId === authUserId);
+
+    const financials = {
+        authUserId: authUserId,
+        salary: salary,
+        rent: rent, 
+        vehicle: vehicle,
+        food: food,
+        memberships: memberships,
+        insurance: insurance,
+        debt: debt,
+    }
+
+    if (!userInfo) {
+        data.financials.push(financials);
+    } else {
+        userInfo = financials;
+    }
+
+    setData(data);
 }
 
 function createId() {
