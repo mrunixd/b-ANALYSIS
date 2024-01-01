@@ -23,7 +23,7 @@ export interface User {
 
 export interface DataStore {
     users: User[];
-    financials: Financial;
+    financials: Financial[];
 }
 
 function setData(data: DataStore) {
