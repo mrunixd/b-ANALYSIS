@@ -3,6 +3,7 @@ import morgan from 'morgan';
 const app = express();
 
 app.use(json());
+app.use(express.urlencoded({ extended: true }));
 
 // Middleware which allows us to see what requests are being recived
 app.use(morgan('dev'));
@@ -10,9 +11,19 @@ app.use(morgan('dev'));
 // Used to create and provide information to the views folder
 app.set("view engine", "ejs");
 
+
+import { register } from './stage1';
 app.get("/", (req: Request, res: Response) => {
     console.log('Home Page');
     res.render("index");
+});
+
+app.post("/register", (req: Request, res: Response) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const response = register(email, password);
+    return res.json(response);
 });
 
 

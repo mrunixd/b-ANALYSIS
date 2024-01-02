@@ -1,4 +1,5 @@
 import { getData, setData, ErrorObject } from "./dataStore";
+import HTTPError from 'http-errors';
 import validator from 'validator';
 const crypto = require('crypto');
 
@@ -6,12 +7,12 @@ function register(email: string, password: string): number | ErrorObject {
     const data = getData();
     
     if (!validator.isEmail(email)) {
-        return { error: 'Email is not a valid email address.'};
+        throw HTTPError(400, { error: 'Email is not a valid email address.'});
     }
 
     const foundUser = data.users.find(user => user.email.toLowerCase === email.toLowerCase);
     if (foundUser != undefined) {
-        return { error: 'Email address is already in use.'};
+        throw HTTPError(400, { error: 'Email address is already in use.'});
     } 
 
     const userId = createId();
@@ -28,11 +29,11 @@ function login(email: string, password: string): number | ErrorObject {
     const user = data.users.find(user => user.email.toLowerCase() === email.toLowerCase());
 
     if (!user) {
-        return { error: 'Email address is not linked to an existing account' };
+        throw HTTPError(400,  { error: 'Email address is not linked to an existing account' });
     }
 
     if (user.password !== hashPassword(password)) {
-        return { error: 'Incorrect Password' };
+        throw HTTPError(400,  { error: 'Incorrect Password' });
     }
     return user.authUserId;
 }
@@ -88,4 +89,6 @@ function hashPassword(password: string): string {
     sha256Hash.update(password);
     return sha256Hash.digest('hex');
   }
+
   
+export { register };
