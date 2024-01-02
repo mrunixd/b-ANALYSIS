@@ -1,0 +1,41 @@
+import { getData } from "./dataStore";
+import { PassportStatic } from 'passport';
+import { User } from "./dataStore";
+import { hashPassword } from "./stage1";
+import { IncomingMessage } from 'http';
+
+const LocalStrategy = require('passport-local').Strategy;
+
+function initialise(passport: PassportStatic) {
+    const data = getData();
+    const authenticateUser = (email: string , password: string, done: (error: any, user?: User, options?: { message?: string }) => void) => {
+        const user = data.users.find(user => user.email === email);
+        if (!user) {
+            return done(null, undefined, { message: 'No user with that email' });
+        }
+
+        if (user.password !== hashPassword(password)) {
+            return done(null, undefined, { message: 'Password Incorrect!' });
+        }
+        return done(null, user);
+    }
+
+    passport.use(new LocalStrategy({ usernameField: 'email' }, 
+    authenticateUser));
+   
+    passport.serializeUser((user: any, done) => {
+        done(null, user.authUserId);
+        console.log(user.authUserId);
+    });
+
+    passport.deserializeUser((id, done) => { 
+        const foundUser = data.users.find(user => user.authUserId === id);
+        if (foundUser) {
+            done(null, foundUser);
+        } else {
+            done(new Error('User not found'));
+        }
+    });
+}
+
+module.exports = initialise;
