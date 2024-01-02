@@ -18,25 +18,10 @@ function register(email: string, password: string): number | ErrorObject {
 
     const userId = createId();
 
-    const user = { email: email, password: hashPassword(password), authUserId: userId };
+    const user = { email: email, password: password, authUserId: userId };
     data.users.push(user);
     setData(data);
     return userId;
-}
-
-function login(email: string, password: string): number | ErrorObject {
-    const data = getData();
-
-    const user = data.users.find(user => user.email.toLowerCase() === email.toLowerCase());
-
-    if (!user) {
-        throw HTTPError(400,  { error: 'Email address is not linked to an existing account' });
-    }
-
-    if (user.password !== hashPassword(password)) {
-        throw HTTPError(400,  { error: 'Incorrect Password' });
-    }
-    return user.authUserId;
 }
 
 function storeInfo(
@@ -92,4 +77,4 @@ function hashPassword(password: string): string {
   }
 
   
-export { register };
+export { register, login, hashPassword };
