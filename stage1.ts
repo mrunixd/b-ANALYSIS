@@ -10,8 +10,9 @@ function register(email: string, password: string): number | ErrorObject {
         throw HTTPError(400, { error: 'Email is not a valid email address.'});
     }
 
-    const foundUser = data.users.find(user => user.email.toLowerCase === email.toLowerCase);
-    if (foundUser != undefined) {
+    const foundUser = data.users.find(user => user.email.toLowerCase() === email.toLowerCase());
+   
+    if (foundUser) {
         throw HTTPError(400, { error: 'Email address is already in use.'});
     } 
 
