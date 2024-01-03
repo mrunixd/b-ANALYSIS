@@ -77,4 +77,4 @@ function hashPassword(password: string): string {
   }
 
   
-export { register, hashPassword };
+export { register, hashPassword, storeInfo };

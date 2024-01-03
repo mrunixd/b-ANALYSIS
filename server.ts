@@ -4,7 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 import express, { json, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
-import { register, hashPassword } from './stage1';
+import { register, hashPassword, storeInfo } from './stage1';
 
 const app = express();
 const passport = require('passport');
@@ -89,3 +89,24 @@ app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
+app.post("/", checkAuthenticated, (req: Request, res: Response) => {
+    const {
+        authUserId,
+        salary,
+        rent,
+        vehicle,
+        food,
+        memberships,
+        insurance,
+        debt
+    } = req.body;
+   
+    console.log('inputs received');
+    const response = storeInfo(authUserId, salary, rent, vehicle, food, 
+        memberships, insurance, debt);
+    return res.redirect('/results');
+});
+
+app.get("/results", (req: Request, res: Response) => {
+    res.render("results.ejs");
+});
