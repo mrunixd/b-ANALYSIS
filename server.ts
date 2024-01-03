@@ -2,10 +2,22 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
+// defines Express.user
+declare global {
+    namespace Express {
+        interface User {
+            authUserId: number;
+            email: string;
+            password: string;
+            // ... other properties
+        }
+    }
+}
+
 import express, { json, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { register, hashPassword } from './stage1';
-
+import { PassportStatic } from 'passport';
 const app = express();
 const passport = require('passport');
 const flash = require('express-flash');
@@ -37,6 +49,15 @@ app.set("view engine", "ejs");
 
 app.get("/", checkAuthenticated, (req: Request, res: Response) => {
     console.log('Home Page');
+    // Message for aarnav
+    //
+    // This is how you access the userId, it is kept in the request. You can
+    // add more things above in the global variable at the top
+
+    if (req.isAuthenticated()) {
+        const userId = req.user.authUserId;
+        console.log(userId);
+    }
     res.render("index.ejs");
 });
 
@@ -49,6 +70,7 @@ app.post("/register", checkNotAuthenticated, (req: Request, res: Response) => {
     const password = hashPassword(req.body.password);
 
     const response = register(email, password);
+
     return res.redirect('/login');
 });
 

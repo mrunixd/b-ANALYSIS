@@ -2,7 +2,6 @@ import { getData } from "./dataStore";
 import { PassportStatic } from 'passport';
 import { User } from "./dataStore";
 import { hashPassword } from "./stage1";
-import { IncomingMessage } from 'http';
 
 const LocalStrategy = require('passport-local').Strategy;
 
@@ -23,12 +22,11 @@ function initialise(passport: PassportStatic) {
     passport.use(new LocalStrategy({ usernameField: 'email' }, 
     authenticateUser));
    
-    passport.serializeUser((user: any, done) => {
+    passport.serializeUser((user: User , done) => {
         done(null, user.authUserId);
-        console.log(user.authUserId);
     });
 
-    passport.deserializeUser((id, done) => { 
+    passport.deserializeUser((id: number, done) => { 
         const foundUser = data.users.find(user => user.authUserId === id);
         if (foundUser) {
             done(null, foundUser);
