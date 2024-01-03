@@ -16,7 +16,7 @@ declare global {
 
 import express, { json, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
-import { register, hashPassword } from './stage1';
+import { register, hashPassword, storeInfo } from './stage1';
 import { PassportStatic } from 'passport';
 const app = express();
 const passport = require('passport');
@@ -49,15 +49,6 @@ app.set("view engine", "ejs");
 
 app.get("/", checkAuthenticated, (req: Request, res: Response) => {
     console.log('Home Page');
-    // Message for aarnav
-    //
-    // This is how you access the userId, it is kept in the request. You can
-    // add more things above in the global variable at the top
-
-    if (req.isAuthenticated()) {
-        const userId = req.user.authUserId;
-        console.log(userId);
-    }
     res.render("index.ejs");
 });
 
@@ -111,3 +102,33 @@ app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
+app.post("/", checkAuthenticated, (req: Request, res: Response) => {
+    const userId = getUserId(req);
+    const {
+        salary,
+        rent,
+        vehicle,
+        food,
+        memberships,
+        insurance,
+        debt
+    } = req.body;
+   
+    console.log('inputs received');
+    const response = storeInfo(userId, salary, rent, vehicle, food, 
+        memberships, insurance, debt);
+    return res.redirect('/results');
+});
+
+app.get("/results", checkAuthenticated, (req: Request, res: Response) => {
+    return res.render("results.ejs");
+});
+
+function getUserId(req: Request) {
+    if (req.isAuthenticated()) {
+        const userId = req.user.authUserId;
+        console.log(userId);
+        return userId;
+    }
+    return -1;
+}
