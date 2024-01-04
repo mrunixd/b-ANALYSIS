@@ -52,7 +52,7 @@ function storeInfo(
     if (!userInfo) {
         data.financials.push(financials);
     } else {
-        userInfo = financials;
+        Object.assign(userInfo, financials);
     }
 
     setData(data);
@@ -77,4 +77,4 @@ function hashPassword(password: string): string {
   }
 
   
-export { register, hashPassword };
+export { register, hashPassword, storeInfo };
