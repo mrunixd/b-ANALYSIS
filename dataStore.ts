@@ -6,13 +6,14 @@ export interface ErrorObject {
 
 export interface Financial {
     authUserId: number;
-    salary: number | void;
-    rent: number | void;
-    vehicle: number | void;
-    food: number | void;
-    memberships: number | void;
-    insurance: number | void;
-    debt: number | void;
+    salary: number;
+    rent: number;
+    vehicle: number;
+    food: number;
+    memberships: number;
+    insurance: number;
+    debt: number;
+    remainder: number;
 }
 
 export interface User { 
