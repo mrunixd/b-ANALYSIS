@@ -47,6 +47,7 @@ function storeInfo(
         memberships: memberships,
         insurance: insurance,
         debt: debt,
+        remainder: 0
     }
 
     if (!userInfo) {
