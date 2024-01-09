@@ -1,1 +1,19 @@
-<h1>Results</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+</head>
+<body>
+    <h1>Results</h1>
+        <h2>Tax Calculation</h2>
+            <% if (taxDetails) { %>
+                <p>Tax Payable: $<%= taxDetails.taxPayable %></p>
+                <p>Tax PAYG (per week): $<%= taxDetails.taxPAYG %></p>
+                <p>Tax Description: <%= taxDetails.taxDescription %></p>
+            <% } else { %>
+                <p>No tax details available.</p>
+            <% } %>
+</body>
+</html>
