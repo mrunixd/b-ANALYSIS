@@ -17,6 +17,7 @@ declare global {
 import express, { json, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { register, hashPassword, storeInfo } from './stage1';
+import { calculateTax } from './calculation';
 import { PassportStatic } from 'passport';
 const app = express();
 const passport = require('passport');
@@ -121,7 +122,15 @@ app.post("/", checkAuthenticated, (req: Request, res: Response) => {
 });
 
 app.get("/results", checkAuthenticated, (req: Request, res: Response) => {
-    return res.render("results.ejs");
+    const userId = getUserId(req);
+    try {
+        const taxDetails = calculateTax(userId);
+
+        res.render("results.ejs", { taxDetails }); // Passing taxDetails to the EJS template
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Error occurred while calculating tax.");
+    }
 });
 
 function getUserId(req: Request) {
