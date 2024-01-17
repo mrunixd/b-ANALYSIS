@@ -1,4 +1,4 @@
-import { getData, setData, ErrorObject } from "./dataStore";
+import { getData, setData, ErrorObject, Financial } from "./dataStore";
 import HTTPError from 'http-errors';
 import validator from 'validator';
 const crypto = require('crypto');
@@ -26,7 +26,7 @@ function register(email: string, password: string): number | ErrorObject {
 
 function storeInfo(
     authUserId: number,
-    salary: number,
+    salaryBT: number,
     rent: number,
     vehicle: number,
     food: number,
@@ -40,7 +40,8 @@ function storeInfo(
 
     const financials = {
         authUserId: authUserId,
-        salary: salary,
+        salaryBT: salaryBT,
+        salaryAT: 0,
         rent: rent, 
         vehicle: vehicle,
         food: food,

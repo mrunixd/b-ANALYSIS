@@ -21,8 +21,8 @@ function calculateRemainder(authUserId: number) {
         throw HTTPError(400, {error: "Financial details have not been correctly inputted"});
     }
 
-    const expenses = financials.debt + financials.food + financials.insurance + financials.memberships + financials.rent + financials.salary + financials.vehicle;
-    financials.remainder = financials.salary - expenses;
+    const expenses = financials.debt + financials.food + financials.insurance + financials.memberships + financials.rent + financials.vehicle;
+    financials.remainder = financials.salaryAT - expenses;
     
     setData(data);
 }
@@ -46,7 +46,7 @@ export function calculateTax(authUserId: number): Taxes {
     if (financials === undefined) {
         throw HTTPError(400, {error: "Financial details have not been correctly inputed"})
     }
-    const income = financials.salary;
+    const income = financials.salaryBT;
 
     let tax = 0;
     let taxDescription = 'null';
@@ -67,6 +67,9 @@ export function calculateTax(authUserId: number): Taxes {
         taxDescription = 'You fall in the final tax bracket and are required to pay 45c for every dollar over 180000';
     }
 
+    financials.salaryAT = financials.salaryBT - tax;
+
+    setData(data);
     return {
         taxPayable: Number(tax.toFixed(2)),
         taxPAYG: Number((tax / 52).toFixed(2)),

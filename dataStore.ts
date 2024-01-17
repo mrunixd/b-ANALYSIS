@@ -6,7 +6,8 @@ export interface ErrorObject {
 
 export interface Financial {
     authUserId: number;
-    salary: number;
+    salaryBT: number;
+    salaryAT: number;
     rent: number;
     vehicle: number;
     food: number;
