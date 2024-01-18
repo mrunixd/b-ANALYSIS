@@ -48,7 +48,7 @@ app.use(morgan('dev'));
 app.set("view engine", "ejs");
 
 
-app.get("/", checkAuthenticated, (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response) => {
     console.log('Home Page');
     res.render("index.ejs");
 });
@@ -63,7 +63,7 @@ app.post("/register", checkNotAuthenticated, (req: Request, res: Response) => {
 
     const response = register(email, password);
 
-    return res.redirect('/login');
+    return res.redirect('/');
 });
 
 app.get("/login", checkNotAuthenticated, (req: Request, res: Response) => {
@@ -71,7 +71,7 @@ app.get("/login", checkNotAuthenticated, (req: Request, res: Response) => {
 });
 
 app.post("/login", checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/',
+    successRedirect: '/results',
     failureRedirect: '/login',
     failureFlash: true
 }));
@@ -103,7 +103,7 @@ app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
-app.post("/", checkAuthenticated, (req: Request, res: Response) => {
+app.post("/", checkNotAuthenticated, (req: Request, res: Response) => {
     const userId = getUserId(req);
     const {
         salary,
