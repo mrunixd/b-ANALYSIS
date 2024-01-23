@@ -6,9 +6,11 @@ import { hashPassword } from "./stage1";
 const LocalStrategy = require('passport-local').Strategy;
 
 function initialise(passport: PassportStatic) {
-    const data = getData();
+    
     const authenticateUser = (email: string , password: string, done: (error: any, user?: User, options?: { message?: string }) => void) => {
+        const data = getData();
         const user = data.users.find(user => user.email === email);
+
         if (!user) {
             return done(null, undefined, { message: 'No user with that email' });
         }
@@ -26,7 +28,8 @@ function initialise(passport: PassportStatic) {
         done(null, user.authUserId);
     });
 
-    passport.deserializeUser((id: number, done) => { 
+    passport.deserializeUser((id: number, done) => {
+        const data = getData();
         const foundUser = data.users.find(user => user.authUserId === id);
         if (foundUser) {
             done(null, foundUser);
