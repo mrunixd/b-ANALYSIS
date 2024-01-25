@@ -21,6 +21,7 @@ function register(email: string, password: string): number | ErrorObject {
     const user = { email: email, password: password, authUserId: userId };
     data.users.push(user);
     setData(data);
+    console.log(getData());
     return userId;
 }
 

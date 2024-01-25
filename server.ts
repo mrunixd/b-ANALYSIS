@@ -48,14 +48,37 @@ app.use(morgan('dev'));
 app.set("view engine", "ejs");
 
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", checkAuthenticated, (req: Request, res: Response) => {
     console.log('Home Page');
-    res.render("index.ejs");
+});
+
+
+
+app.get("/inputs", checkAuthenticated, (req: Request, res: Response) => {
+    res.render("inputs.ejs");
+});
+
+app.post("/inputs", checkAuthenticated, (req: Request, res: Response) => {
+    const userId = getUserId(req);
+    const {
+        salary,
+        rent,
+        vehicle,
+        food,
+        memberships,
+        insurance,
+        debt
+    } = req.body;
+   
+    console.log('inputs received');
+    storeInfo(userId, salary, rent, vehicle, food, 
+        memberships, insurance, debt);
+    return res.redirect('/results');
 });
 
 app.get("/register", checkNotAuthenticated, (req: Request, res: Response) => {
     res.render("register.ejs");
-});
+});      
 
 app.post("/register", checkNotAuthenticated, (req: Request, res: Response) => {
     const email = req.body.email;
@@ -63,13 +86,13 @@ app.post("/register", checkNotAuthenticated, (req: Request, res: Response) => {
 
     const response = register(email, password);
 
-    return res.redirect('/');
+    return res.redirect('/login');
 });
 
 app.get("/login", checkNotAuthenticated, (req: Request, res: Response) => {
     res.render("login.ejs");
 });
-
+  
 app.post("/login", checkNotAuthenticated, passport.authenticate('local', {
     successRedirect: '/results',
     failureRedirect: '/login',
@@ -82,8 +105,20 @@ app.delete('/logout', (req: Request, res: Response) => {
     });
 });
 
+app.get("/results", checkAuthenticated, (req: Request, res: Response) => {
+    const userId = getUserId(req);
+    try {
+        const taxDetails = calculateTax(userId);
+        console.log(taxDetails);
+        res.render("results.ejs", { taxDetails }); // Passing taxDetails to the EJS template
+    } catch (error) {
+        console.error(error);
+        res.redirect('/inputs');
+    }
+});
+
 function checkAuthenticated(req: Request, res: Response, next: NextFunction) {
-    if ((req as any).isAuthenticated()) {
+    if ((req as any).isAuthenticated()) {  
         return next();
     }
 
@@ -103,35 +138,6 @@ app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
-app.post("/", checkNotAuthenticated, (req: Request, res: Response) => {
-    const userId = getUserId(req);
-    const {
-        salary,
-        rent,
-        vehicle,
-        food,
-        memberships,
-        insurance,
-        debt
-    } = req.body;
-   
-    console.log('inputs received');
-    const response = storeInfo(userId, salary, rent, vehicle, food, 
-        memberships, insurance, debt);
-    return res.redirect('/results');
-});
-
-app.get("/results", checkAuthenticated, (req: Request, res: Response) => {
-    const userId = getUserId(req);
-    try {
-        const taxDetails = calculateTax(userId);
-
-        res.render("results.ejs", { taxDetails }); // Passing taxDetails to the EJS template
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send("Error occurred while calculating tax.");
-    }
-});
 
 function getUserId(req: Request) {
     if (req.isAuthenticated()) {
